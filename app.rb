@@ -4,7 +4,9 @@ require 'sinatra/reloader'
 require 'sqlite3'
 
 def get_db
-	return SQLite3::Database.new 'barbershop.db'
+	db =  SQLite3::Database.new 'barbershop.db'
+	db.results_as_hash = true
+	return db #return mast be
 end
 
 configure do
@@ -19,6 +21,10 @@ configure do
 			"barber" TEXT,
 			"color" TEXT
 		)'
+
+	
+
+
 end
 
 get '/' do
@@ -69,6 +75,14 @@ post '/visit' do
 end
 
 get '/showusers' do
-  erb "Hello World"
+
+
+
+	db = get_db
+
+	@users = db.execute 'select * from Users' #assign result db quety to variable
+
+	
+	 erb :showusers
 end
 
