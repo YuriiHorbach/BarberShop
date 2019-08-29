@@ -89,8 +89,7 @@ post '/visit' do
 		)
 		values (?, ?, ?, ?, ?)', [@username, @phone, @datetime, @barber, @color]
 
-	erb "OK, username is #{@username}, #{@phone}, #{@datetime}, #{@barber}, #{@color}"
-
+	erb "<h2>Thanks. You signed up.</h2>"
 end
 
 get '/showusers' do
