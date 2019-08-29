@@ -3,37 +3,34 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'sqlite3'
 
-def is_barber_exists? db, name
-		@db.execute('select * from Barbers where name=?',[name]).length > 0 
-
-end 
-	
-def seed_db db, barbers
-		barbers.each do |barber|
-			if !is_barber_exists? @db, barber
-				@db.execute 'insert into Barbers (name) values (?)', [barber]
-			end
-		end
+def is_barber_exists? db, barbers
+	db.execute('select * from Barbers where name=?',[name]).length > 0
 end
 
+def seed_db db, barbers
+
+	barbers.each do |barber|
+		if !is_barber_exists? db, barber
+			db.execute 'insert into Barbers (name) values (?)',[barber]
+		end
+	end
+end
 
 def get_db
-	@db = SQLite3::Database.new 'barbershop.db'
-	@db.results_as_hash = true
-  return @db
-
+	db =  SQLite3::Database.new 'barbershop.db'
+	db.results_as_hash = true
+	return db #return mast be
 end
+
 
 before do
 	db = get_db
-	@barbers = db.execute 'select * from Barbers'  #доступна в усіх вью
+	@barbers = db.execute 'select * from Barbers'
 end
 
-
 configure do
-	@db = get_db
-	@db_barbers = get_db
-	@db.execute 'CREATE TABLE IF NOT EXISTS
+	db = get_db
+	db.execute 'CREATE TABLE IF NOT EXISTS
 		"Users"
 		(
 			"id" INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -44,15 +41,9 @@ configure do
 			"color" TEXT
 		)'
 
-	@db_barbers.execute ' CREATE TABLE IF NOT EXISTS
-		"Barbers"
-		(
-			"id" INTEGER PRIMARY KEY AUTOINCREMENT,
-			"name" TEXT
-		)'
-
-		seed_db @db, ['Jessie Pinkman', 'Walter White', 'Gus Fring', 'Mike Ehrmantraut']
 	
+
+
 end
 
 get '/' do
@@ -64,20 +55,16 @@ get '/about' do
 end
 
 get '/visit' do
-
 	erb :visit
 end
 
 post '/visit' do
-	@db = get_db
 
 	@username = params[:username]
 	@phone = params[:phone]
 	@datetime = params[:datetime]
 	@barber = params[:barber]
 	@color = params[:color]
-
-	@users = @db.execute 'select * from Users' #assign result db quety to variable
 
 	# хеш
 	hh = { 	:username => 'Введите имя',
@@ -90,8 +77,8 @@ post '/visit' do
 		return erb :visit
 	end
 
-	
-	@db.execute 'insert into
+	db = get_db
+	db.execute 'insert into
 		Users
 		(
 			username,
@@ -104,20 +91,15 @@ post '/visit' do
 
 	erb "OK, username is #{@username}, #{@phone}, #{@datetime}, #{@barber}, #{@color}"
 
-
-
-
 end
 
 get '/showusers' do
 
 
 
-	@db = get_db
+	db = get_db
 
-	@users = @db.execute 'select * from Users' #assign result db quety to variable
-
+	@users = db.execute 'select * from Users' #assign result db quety to variable
 	
-	erb :showusers
+	 erb :showusers
 end
-
