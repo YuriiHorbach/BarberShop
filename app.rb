@@ -4,12 +4,15 @@ require 'sinatra/reloader'
 require 'sqlite3'
 
 def get_db
-	return SQLite3::Database.new 'barbershop.db'
+	@db = SQLite3::Database.new 'barbershop.db'
+	@db.results_as_hash = true
+  return @db
 end
 
 configure do
-	db = get_db
-	db.execute 'CREATE TABLE IF NOT EXISTS
+	@db = get_db
+	@db_barbers = get_db
+	@db.execute 'CREATE TABLE IF NOT EXISTS
 		"Users"
 		(
 			"id" INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -19,6 +22,15 @@ configure do
 			"barber" TEXT,
 			"color" TEXT
 		)'
+
+	# @db_barbers.execute ' CREATE TABLE IF NOT EXISTS
+	# 	"Barbers"
+	# 	(
+	# 		"id" INTEGER PRIMARY KEY AUTOINCREMENT,
+	# 		"barbername" TEXT,
+	# 	)'
+	
+
 end
 
 get '/' do
@@ -34,11 +46,14 @@ get '/visit' do
 end
 
 post '/visit' do
+	@db = get_db
+	 
+
 
 	@username = params[:username]
 	@phone = params[:phone]
 	@datetime = params[:datetime]
-	@barber = params[:barber]
+	@barber = @db.execute 'select barbername from Barbers'
 	@color = params[:color]
 
 	# хеш
@@ -52,8 +67,8 @@ post '/visit' do
 		return erb :visit
 	end
 
-	db = get_db
-	db.execute 'insert into
+	
+	@db.execute 'insert into
 		Users
 		(
 			username,
@@ -66,5 +81,18 @@ post '/visit' do
 
 	erb "OK, username is #{@username}, #{@phone}, #{@datetime}, #{@barber}, #{@color}"
 
+end
+
+get '/showusers' do
+
+
+	@db = get_db
+
+	# @users = db.execute 'select * from users order by id desc'
+	@users = @db.execute 'select * from users'
+
+
+
+  erb :showusers
 end
 
