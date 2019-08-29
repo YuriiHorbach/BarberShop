@@ -24,6 +24,12 @@ def get_db
 
 end
 
+before do
+	db = get_db
+	@barbers = db.execute 'select * from Barbers'  #доступна в усіх вью
+end
+
+
 configure do
 	@db = get_db
 	@db_barbers = get_db
@@ -58,19 +64,20 @@ get '/about' do
 end
 
 get '/visit' do
+
 	erb :visit
 end
 
 post '/visit' do
 	@db = get_db
-	 
-
 
 	@username = params[:username]
 	@phone = params[:phone]
 	@datetime = params[:datetime]
-	@barber = @db.execute 'select barbername from Barbers'
+	@barber = params[:barber]
 	@color = params[:color]
+
+	@users = @db.execute 'select * from Users' #assign result db quety to variable
 
 	# хеш
 	hh = { 	:username => 'Введите имя',
@@ -97,6 +104,9 @@ post '/visit' do
 
 	erb "OK, username is #{@username}, #{@phone}, #{@datetime}, #{@barber}, #{@color}"
 
+
+
+
 end
 
 get '/showusers' do
@@ -108,6 +118,6 @@ get '/showusers' do
 	@users = @db.execute 'select * from Users' #assign result db quety to variable
 
 	
-	 erb :showusers
+	erb :showusers
 end
 
