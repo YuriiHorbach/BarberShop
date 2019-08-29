@@ -1,14 +1,30 @@
 <h2>Your data</h2>
 
+<<<<<<< HEAD
 <table class="table">
 	<% @users.each do |row|%>
 	<tr>
 		<td><%= row['id']%></td>
 		<td><%= row['username']%></td>
+=======
+<h1>Users</h1>
+
+<%= @users%>
+
+<table class="table">
+	<% @users.each do |row|%>
+	<tr>
+		<td><%= row['username']%> </td>
+>>>>>>> origin/master
 		<td><%= row['phone']%></td>
 		<td><%= row['datestamp']%></td>
 		<td><%= row['barber']%></td>
 		<td><%= row['color']%></td>
 	</tr>
+<<<<<<< HEAD
 <% end%>
+=======
+	<%end%>
+
+>>>>>>> origin/master
 </table>
