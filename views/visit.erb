@@ -40,10 +40,14 @@ $(function() {
     <label>Ваш парикмахер:</label>
     <select name="barber" class="form-control">
     
-      
-        <option <%= row['name'] == 'Jessie Pinkman' ? 'selected' : '' %>>Jessie Pinkman</option>
-   
- 
+<!--       
+        <option <%= @barber == 'Jessie Pinkman' ? 'selected' : '' %>>Jessie Pinkman</option>
+        <option <%= @barber == 'Jessie Pinkman' ? 'selected' : '' %>>Jessie Pinkman</option>
+        <option <%= @barber == 'Jessie Pinkman' ? 'selected' : '' %>>Jessie Pinkman</option> -->
+
+        <% @barbers.each do |item|%>
+          <option <%= @barber == item['name'] ? 'selected' : '' %>><%= item['name']%></option>
+        <% end%>
    </select>
   </div>
 
