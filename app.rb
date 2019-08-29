@@ -4,15 +4,10 @@ require 'sinatra/reloader'
 require 'sqlite3'
 
 def get_db
-<<<<<<< HEAD
 	@db = SQLite3::Database.new 'barbershop.db'
 	@db.results_as_hash = true
   return @db
-=======
-	db =  SQLite3::Database.new 'barbershop.db'
-	db.results_as_hash = true
-	return db #return mast be
->>>>>>> origin/master
+
 end
 
 configure do
@@ -29,7 +24,6 @@ configure do
 			"color" TEXT
 		)'
 
-<<<<<<< HEAD
 	# @db_barbers.execute ' CREATE TABLE IF NOT EXISTS
 	# 	"Barbers"
 	# 	(
@@ -38,11 +32,10 @@ configure do
 	# 	)'
 	
 
-=======
 	
 
 
->>>>>>> origin/master
+
 end
 
 get '/' do
@@ -98,16 +91,6 @@ end
 get '/showusers' do
 
 
-<<<<<<< HEAD
-	@db = get_db
-
-	# @users = db.execute 'select * from users order by id desc'
-	@users = @db.execute 'select * from users'
-
-
-
-  erb :showusers
-=======
 
 	db = get_db
 
@@ -115,6 +98,5 @@ get '/showusers' do
 
 	
 	 erb :showusers
->>>>>>> origin/master
 end
 
